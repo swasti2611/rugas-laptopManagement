@@ -14,12 +14,17 @@ const UserDashboard = () => {
   // Fetch the user's name from localStorage
   useEffect(() => {
     const loggedInUser = localStorage.getItem("user");
-    if (loggedInUser) {
+    const token = localStorage.getItem("token");
+
+    // If no user is logged in or no token, redirect to login page
+    if (!loggedInUser || !token) {
+      navigate("/login");
+    } else {
       const user = JSON.parse(loggedInUser);
       setUserName(user.name);
       fetchAssignedLaptops(user.id); // Fetch assigned laptops after getting the user
     }
-  }, []);
+  }, [navigate]);
 
   const handleReport = (id) => {
     setReportId(id);
