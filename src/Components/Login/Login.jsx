@@ -21,30 +21,22 @@ const Login = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-  
+
     try {
       // Make the POST request to the backend
       const response = await axios.post("https://laptop-management-3xzx.onrender.com/api/login", formData);
-  
+
       if (response.data.success) {
         // Store the JWT token and user data in local storage
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("user", JSON.stringify(response.data.user));
-  
-        // Log response to see what the user role is
-        console.log(response.data.user.role);
-  
+
         // Redirect based on user role
         if (response.data.user.role === "admin") {
           navigate("/adminboard");
         } else {
           navigate("/"); // Redirect to the home page if not an admin
         }
-  
-        // Refresh the page after a successful login
-        setTimeout(() => {
-          window.location.reload();  // Refresh the page
-        }, 200); // Wait 500ms before refreshing to ensure login process is complete
       } else {
         setError(response.data.message);
       }
@@ -53,8 +45,6 @@ const Login = () => {
       setError("An error occurred while logging in. Please try again.");
     }
   };
-  
-  
 
   return (
     <div className="container d-flex justify-content-center align-items-center" style={{ width: "600px", position: "absolute", left: "35%", top: "15%" }}>
