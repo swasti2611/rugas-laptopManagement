@@ -3,48 +3,46 @@ import SearchInput from "../../Pages/LoginPage/SearchInput";
 import "../../Style/dashboard.css";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { SearchContext } from "../../Context/SearchContext";
-
+import {SearchContext} from "../../Context/SearchContext"
 const UserDashboard = () => {
   const [userName, setUserName] = useState("");
   const [assignedLaptops, setAssignedLaptops] = useState([]); // State to store assigned laptops
-  const { reportId, setReportId } = useContext(SearchContext);
-  const navigate = useNavigate();
-
+const {reportId,setReportId}=useContext(SearchContext)
+let navigate=useNavigate()
   // Fetch the user's name from localStorage
   useEffect(() => {
     const loggedInUser = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-
-    // If no user is logged in or no token, redirect to login page
-    if (!loggedInUser || !token) {
-      navigate("/login");
-    } else {
+    if (loggedInUser) {
       const user = JSON.parse(loggedInUser);
       setUserName(user.name);
       fetchAssignedLaptops(user.id); // Fetch assigned laptops after getting the user
     }
-  }, [navigate]);
+  }, []);
+  useEffect(()=>{
+    console.log(assignedLaptops);
+    
+  })
+  function handleReport(id){
+setReportId(id)
+navigate("/reportissue")
 
-  const handleReport = (id) => {
-    setReportId(id);
-    navigate("/reportissue");
-  };
+  }
 
   // Function to fetch assigned laptops
   const fetchAssignedLaptops = async (employeeId) => {
     try {
-      const token = localStorage.getItem("token"); // Get the token from localStorage
-      const response = await axios.get(
-        `https://laptop-management-3xzx.onrender.com/api/assignments/${employeeId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`, // Pass the token in the header
-          },
+      // Get the token from localStorage or wherever it's stored
+      const token = localStorage.getItem("token");
+  
+      const response = await axios.get(https://laptop-management-3xzx.onrender.com/api/assignments/${employeeId}, {
+        headers: {
+          "Authorization": Bearer ${token} // Pass the token in the header
         }
-      );
-
+      });
+  
       if (response.data.success) {
+       
+        
         setAssignedLaptops(response.data.data); // Set the assigned laptops to state
       }
     } catch (error) {
@@ -63,7 +61,6 @@ const UserDashboard = () => {
 
       {/* Welcome Section */}
       <div
-        className="welcome-section"
         style={{
           minWidth: "173vh",
           position: "relative",
@@ -76,7 +73,6 @@ const UserDashboard = () => {
       >
         <img
           src="https://i.pinimg.com/736x/10/f2/c7/10f2c780c7afe32ca9678d852e302843.jpg"
-          alt="Welcome Banner"
           style={{
             position: "absolute",
             width: "304px",
@@ -96,7 +92,7 @@ const UserDashboard = () => {
             fontSize: "45px",
           }}
         >
-          Welcome Back, {userName}!
+          Welcome Back {userName}!
         </h1>
         <h3
           style={{
@@ -108,39 +104,87 @@ const UserDashboard = () => {
             fontSize: "20px",
           }}
         >
-          You have a task assigned to finish today.
+          You have a task assigned to finish today
         </h3>
       </div>
 
       {/* Assigned Laptops Section */}
-      <div className="container-fluid assignContainer mt-4">
-        <div className="row">
-          {assignedLaptops.length > 0 ? (
-            assignedLaptops.map((laptop) => (
-              <div
-                className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-4"
-                key={laptop.assignmentId}
-              >
-                <div
-                  className="card shadow-0 border rounded-3 h-100"
-                  style={{ padding: "20px" }}
-                >
-                  <div className="card-body">
-                    <div className="row">
-                      {/* Image Section */}
-                      <div className="col-12 col-md-4 mb-3 mb-md-0">
-                        <div className="bg-image hover-zoom ripple rounded ripple-surface">
-                          <img
-                            src="https://i.pinimg.com/736x/d0/70/07/d070075c1d5b8d094d43a36ea431d44c.jpg"
-                            alt="Laptop"
-                            className="img-fluid rounded"
-                            style={{ height: "160px", objectFit: "cover" }}
-                          />
+<div className="container " style={{ marginTop: "30px" }}>
+  <div className="row">
+  {/* Request Section */}
+  
+        <div className="col-lg-12">
+          <div
+            style={{
+              width: "700px",
+              height: "200px",
+              backgroundColor: "white",
+              position: "absolute",
+              left: "70%",
+              top: "70px",
+            }}
+          >
+            <div className="row">
+              <div className="col-lg-6" >
+                <div className="container" style={{ marginTop: "20px", marginLeft:'30px' }}>
+                  <div className="row">
+                    <div className="col-lg-12">
+                      <div className="card bg-primary order-card shadow">
+                        <div className="card-block">
+                          <h6 className="m-b-20">Request for new laptop</h6>
+                          <div>
+                            Click here{" "}
+                            <i className="fa-regular fa-hand-point-down"></i>
+                          </div>
+                          <button
+                            type="button"
+                            className="btn bg-info"
+                            style={{ marginTop: "20px", marginLeft: "30px" }}
+                          >
+                            <Link to="/request-laptop">Get New Laptop</Link>
+                          </button>
                         </div>
                       </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className="container-fluid assignContainer">
+  <div className="row">
+    {assignedLaptops.length > 0 ? (
+      assignedLaptops.map((laptop) => (
+        <div
+          className="col-12 col-sm-12 col-md-12 col-lg-6 col-xl-4 mb-4"
+          key={laptop.assignmentId}
+        >
+          <div
+            className="card shadow-0 border rounded-3 h-100"
+            style={{ padding: "20px" }}
+          >
+            <div className="card-body">
+              <div className="row">
+                {/* Image Section */}
+                <div className="col-12 col-md-4 mb-3 mb-md-0">
+                  <div className="bg-image hover-zoom ripple rounded ripple-surface">
+                    <img
+                      src="https://i.pinimg.com/736x/d0/70/07/d070075c1d5b8d094d43a36ea431d44c.jpg"
+                      alt="Product"
+                      className="img-fluid rounded"
+                      style={{ height: "160px", objectFit: "cover" }}
+                    />
+                  </div>
+                </div>
 
-                      {/* Laptop Details Section */}
-                      <div className="col-12 col-md-8">
+                {/* Laptop Details Section */}
+                <div className="col-12 col-md-8">
+                  <div className="row">
+                    <div className="col-12">
+                      <div className="container">
                         <div className="mt-1 mb-0 text-muted medium">
                           <span>Brand</span>
                           <span className="text-primary"> : </span>
@@ -161,30 +205,39 @@ const UserDashboard = () => {
                           <span className="text-primary"> : </span>
                           <span>{laptop.condition}</span>
                         </div>
-
-                        {/* Button Section */}
-                        <div className="d-flex justify-content-center mt-3">
-                          <button
-                            onClick={() => handleReport(laptop._id)}
-                            type="button"
-                            className="btn btn-info"
-                            style={{ width: "140px" }}
-                          >
-                            Report
-                          </button>
-                        </div>
                       </div>
+                    </div>
+
+                    {/* Button Section */}
+                    <div className="col-12 d-flex justify-content-center mt-3">
+                      <button
+                        onClick={() => handleReport(laptop._id)}
+                        type="button"
+                        className="btn btn-info"
+                        style={{ width: "140px" }}
+                      >
+                        Report
+                      </button>
                     </div>
                   </div>
                 </div>
               </div>
-            ))
-          ) : (
-            <p className="text-center">No laptops assigned yet.</p>
-          )}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+      ))
+    ) : (
+      <p className="text-center">No laptops assigned yet.</p>
+    )}
+  </div>
+</div>
+
+  </div>
+</div>
+
+
+    
+ 
   );
 };
 
