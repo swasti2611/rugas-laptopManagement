@@ -35,7 +35,9 @@ const Login = () => {
         if (response.data.user.role === "admin") {
           navigate("/adminboard");
         } else {
-          navigate("/"); // Redirect to the home page if not an admin
+          setTimeout(()=>{
+            navigate("/");
+          },500) // Redirect to the home page if not an admin
         }
       } else {
         setError(response.data.message);
