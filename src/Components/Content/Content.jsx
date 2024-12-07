@@ -133,7 +133,7 @@ const Content = () => {
                         <div className="col-md-12 col-lg-12 mb-4">
                           <div className="bg-image hover-zoom ripple rounded ripple-surface">
                             <img
-                              src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(4).webp"
+                              src="https://i.pinimg.com/736x/d0/70/07/d070075c1d5b8d094d43a36ea431d44c.jpg"
                               alt="Product"
                               style={{
                                 width: '100%',
